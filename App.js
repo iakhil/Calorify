@@ -1,19 +1,19 @@
 // App.js
 import React from 'react';
-import { View, Text } from 'react-native';
-import ImageUpload from './components/ImageUpload';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import ManualEntry from './components/ManualEntry';
+import ImageUpload from './components/ImageUpload'; // New screen
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 20, marginBottom: 20 }}>Calorie Tracker</Text>
-
-      {/* Image Upload Component */}
-      <ImageUpload />
-
-      {/* Manual Entry Component */}
-      <ManualEntry />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="ManualEntry">
+        <Stack.Screen name="ManualEntry" component={ManualEntry} />
+        <Stack.Screen name="ImageUpload" component={ImageUpload} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

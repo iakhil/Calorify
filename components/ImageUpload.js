@@ -1,35 +1,106 @@
-// components/ImageUpload.js
 import React, { useState } from 'react';
-import { Button, Image, View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { View, Button, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 
 export default function ImageUpload() {
-  const [image, setImage] = useState(null);
+  const [imageUri, setImageUri] = useState(null);
 
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      alert('Permission to access camera roll is required!');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+  const pickImage = () => {
+    launchImageLibrary({ mediaType: 'photo' }, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.error('ImagePicker Error: ', response.error);
+      } else if (response.assets && response.assets.length > 0) {
+        setImageUri(response.assets[0].uri);
+      }
     });
+  };
 
-    if (!result.cancelled) {
-      setImage(result.uri);
-      // Send image to API for processing if needed
-    }
+  const captureImage = () => {
+    launchCamera({ mediaType: 'photo' }, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.error) {
+        console.error('Camera Error: ', response.error);
+      } else if (response.assets && response.assets.length > 0) {
+        setImageUri(response.assets[0].uri);
+      }
+    });
   };
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image of food or nutrient label" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginTop: 20 }} />}
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Upload or Capture an Image</Text>
+      
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={pickImage}>
+          <Text style={styles.buttonText}>Pick from Gallery</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.button} onPress={captureImage}>
+          <Text style={styles.buttonText}>Capture from Camera</Text>
+        </TouchableOpacity>
+      </View>
+
+      {imageUri ? (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: imageUri }} style={styles.image} />
+        </View>
+      ) : (
+        <Text style={styles.placeholderText}>No image selected</Text>
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
+  },
+  button: {
+    flex: 1,
+    backgroundColor: '#6200ea',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginHorizontal: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  imageContainer: {
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    elevation: 5,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 8,
+  },
+  placeholderText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: '#999',
+  },
+});

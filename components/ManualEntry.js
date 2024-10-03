@@ -1,9 +1,9 @@
-// components/ManualEntry.js
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, ActivityIndicator } from 'react-native';
-import { Picker } from '@react-native-picker/picker';  
+import { View, TextInput, TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import { OPENAI_API_KEY } from '@env';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ManualEntry() {
   const [foodItem, setFoodItem] = useState('');
@@ -63,58 +63,133 @@ export default function ManualEntry() {
     setCaloriesBurned(totalCaloriesBurned.toFixed(2));
   };
 
-  return (
-    <View style={{ padding: 20 }}>
-      {/* Food entry section */}
-      <TextInput
-        placeholder="Enter food item"
-        value={foodItem}
-        onChangeText={setFoodItem}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-      />
-      <TextInput
-        placeholder="Enter quantity (e.g., 100g, 1 cup)"
-        value={quantity}
-        onChangeText={setQuantity}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-      />
-      <Button title="Calculate Calories" onPress={calculateCalories} />
+  const navigation = useNavigation();
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 20 }} />
-      ) : (
-        calories && <Text style={{ marginTop: 20 }}>Calories: {calories}</Text>
-      )}
+  <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ImageUpload')}>
+  <Text style={styles.buttonText}>Go to Image Upload</Text>
+</TouchableOpacity>
+
+  return (
+    <View style={styles.container}>
+      {/* Food entry section */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Food Entry</Text>
+        <TextInput
+          placeholder="Enter food item"
+          value={foodItem}
+          onChangeText={setFoodItem}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Enter quantity (e.g., 100g, 1 cup)"
+          value={quantity}
+          onChangeText={setQuantity}
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.button} onPress={calculateCalories}>
+          <Text style={styles.buttonText}>Calculate Calories</Text>
+        </TouchableOpacity>
+
+        {loading ? (
+          <ActivityIndicator size="large" color="#6200ea" style={styles.loader} />
+        ) : (
+          calories && <Text style={styles.resultText}>Calories: {calories}</Text>
+        )}
+      </View>
 
       {/* Physical activity section */}
-      <Text style={{ marginTop: 20 }}>Select Physical Activity</Text>
-      <View style={{ borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}>
-    <Picker
-    selectedValue={selectedActivity}
-    style={{ height: 50, width: '100%', backgroundColor: '#f0f0f0', marginBottom: 10 }}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Physical Activity</Text>
+        <Picker
+          selectedValue={selectedActivity}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedActivity(itemValue)}
+        >
+          <Picker.Item label="Running" value="running" />
+          <Picker.Item label="Cycling" value="cycling" />
+          <Picker.Item label="Swimming" value="swimming" />
+          <Picker.Item label="Walking" value="walking" />
+          <Picker.Item label="Jumping Rope" value="jumpingRope" />
+        </Picker>
 
-    onValueChange={(itemValue) => setSelectedActivity(itemValue)}
-    >
-    <Picker.Item label="Running" value="running" />
-    <Picker.Item label="Cycling" value="cycling" />
-    <Picker.Item label="Swimming" value="swimming" />
-    <Picker.Item label="Walking" value="walking" />
-    <Picker.Item label="Jumping Rope" value="jumpingRope" />
-    </Picker>
-    </View>
-    
-      <TextInput
-        placeholder="Enter duration (minutes)"
-        value={duration}
-        onChangeText={setDuration}
-        keyboardType="numeric"
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-      />
-      <Button title="Calculate Calories Burnt" onPress={calculateCaloriesBurned} />
+        <TextInput
+          placeholder="Enter duration (minutes)"
+          value={duration}
+          onChangeText={setDuration}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.button} onPress={calculateCaloriesBurned}>
+          <Text style={styles.buttonText}>Calculate Calories Burnt</Text>
+        </TouchableOpacity>
 
-      {caloriesBurned && (
-        <Text style={{ marginTop: 20 }}>Calories Burned: {caloriesBurned}</Text>
-      )}
+        {caloriesBurned && (
+          <Text style={styles.resultText}>Calories Burned: {caloriesBurned}</Text>
+        )}
+      </View>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ImageUpload')}>
+         <Text style={styles.buttonText}>Upload Image</Text>
+</TouchableOpacity>
     </View>
   );
+  
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+    justifyContent: 'center',
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    elevation: 5,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+  },
+  input: {
+    height: 50,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: '#f0f0f0',
+  },
+  button: {
+    backgroundColor: '#6200ea',
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loader: {
+    marginTop: 20,
+  },
+  resultText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: '#333',
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    backgroundColor: '#f0f0f0',
+    marginBottom: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+});
