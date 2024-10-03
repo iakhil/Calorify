@@ -11,7 +11,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="ManualEntry">
-        <Stack.Screen name="ManualEntry" component={ManualEntry} />
+        <Stack.Screen name="Calculate your calories" component={ManualEntry} />
         <Stack.Screen name="ImageUpload" component={ImageUpload} />
       </Stack.Navigator>
     </NavigationContainer>
