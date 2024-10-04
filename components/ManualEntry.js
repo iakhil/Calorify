@@ -38,7 +38,7 @@ export default function ManualEntry() {
           {
             model: 'gpt-4',
             messages: [
-              { role: "system", content: "You are a helpful assistant for food calorie counting. You only provide the number of calories. Nothing else. STRICTLY, just provide the expected number of calories. Do not append any text whatsoever. Also, sum up the calories if there are multiple items." },
+              { role: "system", content: "You are a helpful assistant for food calorie counting. You only provide the number of calories. Nothing else. STRICTLY, just provide the expected number of calories. Do not append any text whatsoever." },
               { role: "user", content: `How many calories are in ${quantity} of ${food}?` }
             ],
             max_tokens: 50,
@@ -153,6 +153,10 @@ export default function ManualEntry() {
         {/* Button to navigate to ImageUpload */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ImageUpload')}>
           <Text style={styles.buttonText}>Go to Image Upload</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LabelUpload')}>
+          <Text style={styles.buttonText}>Label Reader</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
