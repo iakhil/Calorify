@@ -5,6 +5,7 @@ import { View, Text, Button, Image, StyleSheet, ScrollView } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 import { OPENAI_API_KEY } from '@env';
 import axios from 'axios';
+import { readAsStringAsync } from 'expo-file-system';
 
 const LabelUpload = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -20,6 +21,7 @@ const LabelUpload = () => {
     });
 
     if (!result.canceled) {
+      console.log('Image URI:', result.uri);
       setImageUri(result.uri);
     }
   };
@@ -30,21 +32,14 @@ const LabelUpload = () => {
 
     try {
       // Convert the image to base64
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
-      const reader = new FileReader();
-
-      const base64Image = await new Promise((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result.split(',')[1]); // Only base64 data without prefix
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
+      const base64Image = await readAsStringAsync(imageUri, { encoding: 'base64' });
+      console.log('Base64 Image Length:', base64Image.length);
 
       // Send the image to OpenAI's API for OCR and analysis
       const aiResponse = await axios.post(
         'https://api.openai.com/v1/chat/completions',
         {
-          model: 'gpt-4',
+          model: 'gpt-4o-mini',
           messages: [
             {
               role: 'system',
@@ -54,8 +49,12 @@ const LabelUpload = () => {
               role: 'user',
               content: `Extract nutritional information from the following image: ${base64Image}`,
             },
+            {
+                "type": "image_url",
+                "image_url": `data:image/jpeg;based64,${base64_image}`
+            }
           ],
-          max_tokens: 100,
+          max_tokens: 200,
         },
         {
           headers: {
@@ -65,10 +64,13 @@ const LabelUpload = () => {
         }
       );
 
+      console.log('AI Response:', aiResponse.data);
+
       // Assuming the response contains a summary and remarks
       setAnalysisResult({ summary: aiResponse.data.choices[0].message.content.trim(), remarks: 'Suggested consumption remarks based on nutritional information.' });
     } catch (error) {
       console.error('Failed to analyze the label:', error);
+      alert('Failed to analyze the label. Please try again.');
     } finally {
       setLoading(false);
     }
