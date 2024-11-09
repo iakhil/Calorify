@@ -158,6 +158,10 @@ export default function ManualEntry() {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LabelUpload')}>
           <Text style={styles.buttonText}>Label Reader</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Generate Recipes')}>
+          <Text style={styles.buttonText}>Generate Recipes</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
