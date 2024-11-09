@@ -6,6 +6,7 @@ import ManualEntry from './components/ManualEntry';
 import ImageUpload from './components/ImageUpload'; // New screen
 import LabelUpload  from './components/LabelUpload';
 
+
 const Stack = createStackNavigator();
 
 export default function App() {
