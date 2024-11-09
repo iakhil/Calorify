@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ManualEntry from './components/ManualEntry';
 import ImageUpload from './components/ImageUpload'; // New screen
 import LabelUpload  from './components/LabelUpload';
+import RecipeGenerator from './components/RecipeGenerator';
 
 
 const Stack = createStackNavigator();
@@ -14,6 +15,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="ManualEntry">
         <Stack.Screen name="Calculate your calories" component={ManualEntry} />
+        <Stack.Screen name="Generate Recipes" component={RecipeGenerator}/>
         <Stack.Screen name="ImageUpload" component={ImageUpload} />
         <Stack.Screen name="LabelUpload" component={LabelUpload} />
       </Stack.Navigator>
