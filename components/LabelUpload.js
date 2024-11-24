@@ -73,7 +73,7 @@ const processImage = async () => {
     // Assuming the response contains text content
     setAnalysisResult({
       summary: response.data.choices[0].message.content.trim(),
-      remarks: 'AI analysis completed successfully.',
+      remarks: 'Analysis completed.',
     });
   } catch (error) {
     console.error('Failed to analyze the label:', error.response?.data || error.message);
