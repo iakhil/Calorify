@@ -8,6 +8,8 @@ import LabelUpload  from './components/LabelUpload';
 import RecipeGenerator from './components/RecipeGenerator';
 
 
+
+
 const Stack = createStackNavigator();
 
 export default function App() {
