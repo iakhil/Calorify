@@ -10,6 +10,7 @@ import LabelUpload from './components/LabelUpload';
 import RecipeGenerator from './components/RecipeGenerator';
 import AuthPage from './components/AuthPage'; // Authentication Page
 
+
 const Stack = createStackNavigator();
 
 export default function App() {
