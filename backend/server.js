@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 // Enable CORS
 app.use(cors({
-  origin: ['http://localhost:8081', 'http://192.168.1.67:8081', 'https://calorify-hu9n.onrender.com/api/auth/login'], // Replace with the frontend's address
+  origin: ['http://localhost:8081', 'http://192.168.1.67:8081', 'https://calorify-hu9n.onrender.com'], // Replace with the frontend's address
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true, // If you're using cookies or authentication headers
 }));
