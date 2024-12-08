@@ -16,8 +16,8 @@ const AuthPage = ({ setIsLoggedIn }) => {
   const handleAuth = async () => {
     try {
       const endpoint = isRegistering
-        ? 'http://192.168.1.207:4000/api/auth/register'
-        : 'http://192.168.1.207:4000/api/auth/login';
+        ? 'https://calorify-hu9n.onrender.com/api/auth/register'
+        : 'https://calorify-hu9n.onrender.com/api/auth/login';
 
       const payload = isRegistering
         ? { username, email, password }  // Register needs username, email, password
