@@ -12,13 +12,13 @@ const AuthPage = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const RENDER_ENDPOINT = 'https://calorify-hu9n.onrender.com/api'
+  const RENDER_ENDPOINT = 'https://calorify-hu9n.onrender.com/api/';
   // Function to handle both login and register
   const handleAuth = async () => {
     try {
       const endpoint = isRegistering
-        ? 'https://calorify-hu9n.onrender.com/api/auth/register'
-        : 'https://calorify-hu9n.onrender.com/api/auth/login';
+        ? RENDER_ENDPOINT + 'auth/register'
+        : RENDER_ENDPOINT + 'auth/login';
 
       const payload = isRegistering
         ? { username, email, password }  // Register needs username, email, password
