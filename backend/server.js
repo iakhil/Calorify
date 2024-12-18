@@ -1,8 +1,10 @@
+// Required Modules
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Import CORS
 const authRoutes = require('./routes/auth');
+const foodRoutes = require('./routes/food'); // Import food routes
 require('dotenv').config();
 
 const app = express();
@@ -12,11 +14,17 @@ const PORT = 4000;
 app.use(bodyParser.json());
 
 // Enable CORS
-app.use(cors({
-  origin: ['http://localhost:8081', 'http://192.168.1.67:8081', 'https://calorify-hu9n.onrender.com'], // Replace with the frontend's address
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  credentials: true, // If you're using cookies or authentication headers
-}));
+app.use(
+  cors({
+    origin: [
+      'http://localhost:8081',
+      'http://192.168.1.67:8081',
+      'https://calorify-hu9n.onrender.com',
+    ], // Replace with the frontend's address
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    credentials: true, // If you're using cookies or authentication headers
+  })
+);
 
 // Connect to MongoDB
 mongoose
@@ -26,6 +34,7 @@ mongoose
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/food', foodRoutes); // Add food routes
 
 // Start Server
 app.listen(PORT, () => {

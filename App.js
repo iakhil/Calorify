@@ -1,15 +1,15 @@
 // App.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button } from 'react-native'; // <-- Add the missing imports here
+import { View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ManualEntry from './components/ManualEntry';
-import ImageUpload from './components/ImageUpload'; // New screen
+import ImageUpload from './components/ImageUpload';
 import LabelUpload from './components/LabelUpload';
 import RecipeGenerator from './components/RecipeGenerator';
-import AuthPage from './components/AuthPage'; // Authentication Page
-
+import AuthPage from './components/AuthPage';
+import SaveFoodItem from './components/SaveFoodItems'; // Newly added component
 
 const Stack = createStackNavigator();
 
@@ -112,6 +112,20 @@ export default function App() {
               component={LabelUpload}
               options={{
                 headerTitle: 'Upload Label',
+                headerRight: () => (
+                  <Button
+                    onPress={handleLogout}
+                    title="Logout"
+                    color="#f4511e"
+                  />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="SaveFood"
+              component={SaveFoodItem}
+              options={{
+                headerTitle: 'Save Food Item',
                 headerRight: () => (
                   <Button
                     onPress={handleLogout}
